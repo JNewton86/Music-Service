@@ -1,0 +1,69 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class AddSongToPlaylistActivity{
+    +handleRequest(): AddSongToPlaylistResult
+}
+class CreatePlaylistActivity{
+    +handleRequest(): CreatePlaylistResult
+}
+class GetPlaylistActivity{
+    +handleRequest(): GetPlaylistResult
+    }
+class GetPlaylistSongsActivity{
+    +handleRequest(): GetPlaylistSongsResult
+}
+class UpdatePlaylistActivity{
+    +handleRequest(): UpdatePlaylistResult
+}
+class AlbumTrackDao {
+    -DynamoDBMapper dynamoDbMapper
+}
+class PlaylistDao {
+     -DynamoDBMapper dynamoDbMapper
+     -MetricsPublisher metricsPublisher
+}
+class AlbumTrack {
+
+}
+class Playlist {
+     -String id
+     -@DynamoDBHashKey primaryKey : id
+     -List<AlbumTrack> songList
+     -@DynamoDBAttribute attribute : songList
+     +getId(): String
+     +setId()
+
+}
+exception AlbumTrackNotFoundException {
+    -serialVersionUID
+}
+exception InvalidAttributeValueException {
+    -serialVersionUID
+}
+exception PlaylistNotFoundException {
+    -serialVersionUID
+}
+exception InvalidAttributeChangeException{
+    -serialVersionUID
+}
+exception InvalidAttributeException {
+    -serialVersionUID
+}
+exception RuntimeExcpetion{}
+
+AddSongToPlaylistActivity *-- PlaylistDao
+AddSongToPlaylistActivity *-- AlbumTrackDao
+CreatePlaylistActivity *-- PlaylistDao
+GetPlaylistActivity *-- PlaylistDao
+GetPlaylistSongsActivity *-- PlaylistDao
+UpdatePlaylistActivity *-- PlaylistDao
+AlbumTrackNotFoundException <|-- RuntimeExcpetion
+InvalidAttributeValueException <|-- InvalidAttributeException
+PlaylistNotFoundException <|-- RuntimeExcpetion
+InvalidAttributeException <|-- RuntimeExcpetion
+InvalidAttributeChangeException <|-- InvalidAttributeException
+AlbumTrackDao <|-- AlbumTrack
+PlaylistDao <|-- Playlist
+
+@enduml
